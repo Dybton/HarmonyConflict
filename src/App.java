@@ -37,17 +37,21 @@ public class App {
         }
 
         Bipartite conflict = new Bipartite(conflictGraph);
-        if (conflict.isBipartite() && harmonyBipartite(harmonyStack, conflict))
-            System.out.println(1);
-        else
-            System.out.println(0);
 
-        System.out.println("conflict is bipartite " + conflict.isBipartite());
-        System.out.println("harmony is bipartite " + harmonyBipartite(harmonyStack, conflict));
-
+        // if harmony edge is empty. Then only check conflict edge
+        if (harmonyStack.isEmpty()) {
+            if (conflict.isBipartite())
+                System.out.println(1);
+            else
+                System.out.println(0);
+        } else {
+            if (conflict.isBipartite() && harmonyBipartite(harmonyStack, conflict))
+                System.out.println(1);
+            else
+                System.out.println(0);
+        }
         // Checks if conflict is bipartite. If it's not return 0.
         // If it's bipartite check the harmony stack
-
     }
 
     // Function that checks if two colors are the same
@@ -65,7 +69,6 @@ public class App {
             }
         }
         return output;
-
     }
 
 }
