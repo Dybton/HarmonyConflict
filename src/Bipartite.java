@@ -1,4 +1,3 @@
-import edu.princeton.cs.algs4.Graph;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.Stack;
 
@@ -17,20 +16,20 @@ public class Bipartite {
      *
      * @param G the graph
      */
-    public Bipartite(Graph G) {
+    public Bipartite(GraphX G, Bagx B) {
         isBipartite = true;
         color = new boolean[G.V()];
         marked = new boolean[G.V()];
 
         for (int v = 0; v < G.V() && isBipartite; v++) {
             if (!marked[v]) {
-                bfs(G, v);
+                bfs(G, B, v);
             }
         }
         assert check(G);
     }
 
-    private void bfs(Graph G, int s) {
+    private void bfs(GraphX G, Bagx B, int s) {
         Queue<Integer> q = new Queue<Integer>();
         color[s] = WHITE;
         marked[s] = true;
@@ -43,8 +42,14 @@ public class Bipartite {
                     marked[w] = true;
                     color[w] = !color[v];
                     q.enqueue(w);
-                } else if (color[w] == color[v]) {
-                    isBipartite = false;
+                }
+                if (color[w] == color[v]) {
+                    System.out.println(
+                            "it is " + B.inWeightedEdges(v, w) + " that " + v + " " + w + " are the same color");
+                    {
+                        isBipartite = false;
+                    }
+                    // Here we need to call BagX to see if the
                 }
             }
         }
@@ -71,7 +76,7 @@ public class Bipartite {
         return cycle;
     }
 
-    private boolean check(Graph G) {
+    private boolean check(GraphX G) {
         // graph is bipartite
         if (isBipartite) {
             for (int v = 0; v < G.V(); v++) {
