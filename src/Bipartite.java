@@ -4,7 +4,6 @@ import edu.princeton.cs.algs4.Stack;
 
 public class Bipartite {
     private static final boolean WHITE = false;
-    private static final boolean BLACK = true;
 
     private boolean isBipartite; // is the graph bipartite?
     private boolean[] color; // color[v] gives vertices on one side of bipartition
