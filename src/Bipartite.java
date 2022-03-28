@@ -1,11 +1,10 @@
-import edu.princeton.cs.algs4.Graph;
+
 import edu.princeton.cs.algs4.Queue;
-import edu.princeton.cs.algs4.Stack;
 
 public class Bipartite {
     private static final boolean WHITE = false;
 
-    private boolean isBipartite; // is the graph bipartite?
+    private boolean isBipartite = true; // is the graph bipartite?
     private boolean[] color; // color[v] gives vertices on one side of bipartition
     public boolean[] marked; // marked[v] = true iff v has been visited in DFS
     private Queue<Integer> cycle; // odd-length cycle
@@ -14,22 +13,22 @@ public class Bipartite {
      * Determines whether an undirected graph is bipartite and finds either a
      * bipartition or an odd-length cycle.
      *
-     * @param G the graph
+     * @param conflictGraph the graph
      */
-    public Bipartite(Graph G) {
+    public Bipartite(GraphX conflictGraph) {
         isBipartite = true;
-        color = new boolean[G.V()];
-        marked = new boolean[G.V()];
+        color = new boolean[conflictGraph.V()];
+        marked = new boolean[conflictGraph.V()];
 
-        for (int v = 0; v < G.V() && isBipartite; v++) {
+        for (int v = 0; v < conflictGraph.V() && isBipartite; v++) {
             if (!marked[v]) {
-                bfs(G, v);
+                bfs(conflictGraph, v);
             }
         }
-        assert check(G);
+        assert check(conflictGraph);
     }
 
-    private void bfs(Graph G, int s) {
+    private void bfs(GraphX G, int s) {
         Queue<Integer> q = new Queue<Integer>();
         color[s] = WHITE;
         marked[s] = true;
@@ -39,10 +38,14 @@ public class Bipartite {
             int v = q.dequeue();
             for (int w : G.adj(v)) {
                 if (!marked[w]) {
+                    if (G.isHarmonyEdge(v, w) == true)
+                        color[w] = color[v];
+                    if (G.isHarmonyEdge(v, w) == false)
+                        color[w] = !color[v];
                     marked[w] = true;
-                    color[w] = !color[v];
                     q.enqueue(w);
-                } else if (color[w] == color[v]) {
+                } else if ((G.isHarmonyEdge(v, w) == false) && color[w] == color[v]
+                        || (G.isHarmonyEdge(v, w) == true) && color[w] != color[v]) {
                     isBipartite = false;
                 }
             }
@@ -70,8 +73,7 @@ public class Bipartite {
         return cycle;
     }
 
-    private boolean check(Graph G) {
-        // graph is bipartite
+    private boolean check(GraphX G) {
         if (isBipartite) {
             for (int v = 0; v < G.V(); v++) {
                 for (int w : G.adj(v)) {
@@ -85,8 +87,10 @@ public class Bipartite {
         return true;
     }
 
-    public boolean getColor(int num) {
-        return color[num];
+    public void checkIfBipartite() {
+        if (isBipartite == false)
+            System.out.println(0);
+        else
+            System.out.println(1);
     }
-
 }
