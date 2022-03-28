@@ -59,9 +59,7 @@ public class App {
             }
         }
         return output;
-
     }
-
 }
 
 // Conflict graph test - should evaluate to 0
