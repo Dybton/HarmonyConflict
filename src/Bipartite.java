@@ -13,19 +13,18 @@ public class Bipartite {
      * Determines whether an undirected graph is bipartite and finds either a
      * bipartition or an odd-length cycle.
      *
-     * @param conflictGraph the graph
+     * @param graph the graph
      */
-    public Bipartite(GraphX conflictGraph) {
+    public Bipartite(GraphX graph) {
         isBipartite = true;
-        color = new boolean[conflictGraph.V()];
-        marked = new boolean[conflictGraph.V()];
+        color = new boolean[graph.V()];
+        marked = new boolean[graph.V()];
 
-        for (int v = 0; v < conflictGraph.V() && isBipartite; v++) {
+        for (int v = 0; v < graph.V() && isBipartite; v++) {
             if (!marked[v]) {
-                bfs(conflictGraph, v);
+                bfs(graph, v);
             }
         }
-        assert check(conflictGraph);
     }
 
     private void bfs(GraphX G, int s) {
@@ -71,20 +70,6 @@ public class Bipartite {
      */
     public Iterable<Integer> oddCycle() {
         return cycle;
-    }
-
-    private boolean check(GraphX G) {
-        if (isBipartite) {
-            for (int v = 0; v < G.V(); v++) {
-                for (int w : G.adj(v)) {
-                    if (color[v] == color[w]) {
-                        System.err.printf("edge %d-%d with %d and %d in same side of bipartition\n", v, w, v, w);
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
     }
 
     public void checkIfBipartite() {
